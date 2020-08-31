@@ -49,10 +49,16 @@ body {
   top: 0;
   left: 0;
   right: 0;
+  border: 5px blue solid;
+}
+
+#img_fondo {
+  position: relative;
+  border: 5px red solid;
 }
 
 #img_fondo h1 {
-  margin-top: 20%;
+  margin-top: 20vh;
   font-size: 50px;
   color: #fff;
 }
