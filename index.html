@@ -29,6 +29,7 @@
     />
 
     <link rel="stylesheet" href="/assets/css/main.css" />
+
   </head>
   <body>
     <section id="app">
@@ -51,13 +52,21 @@
         <br />
         <br />
         <br />
+        <!-- <br />
         <br />
         <br />
-        <br />
-        <br />
-        <center>
+        <br /> -->
+        <div id="arrowAnim">
+          <div class="arrowSliding">
+            <div class="arrow"></div>
+          </div>
+          <div class="arrowSliding">
+            <div class="arrow"></div>
+          </div>
+        </div>
+        <!-- <center>
           <span> &#8595;</span>
-        </center>
+        </center> -->
       </div>
     </section>
     <section id="sobre-nosotros">
@@ -123,27 +132,44 @@
     </section>
 
     <!-- Etiqueta sin contenido -->
-    <hr />
-    <footer>
-      Contacto
-      <address>Carrera 87 N° 30 - 65 Medellín - Colombia - Suramérica</address>
-      <a target="_blank" href="">Facebook</a>
+    <!-- <hr /> -->
+    <footer id="footer">
       <br />
-      <div>
-        <form>
-          <label for="name">Nombre</label>
-          <input type="text" name="name" id="name" />
-          <br />
-          <label for="email">Email</label>
-          <input type="email" name="email" id="email" />
-          <br />
-          <label for="description">Mensaje</label>
-          <textarea name="description" id="description" cols="30" rows="10"></textarea>
-          <br />
-
-          <input type="submit" value="Enviar" />
-        </form>
+      <div class="row">
+        <div class="column">
+          <center>
+            <p>
+              <strong>Contacto </strong> +(57-1) 593 6161<br />
+              <strong>Email </strong> informacion@eltaller.co<br />
+              Medellín - Colombia<br />
+              Calle 79 # 11 - 45
+              <div class="social-links mt-3">
+                <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="google-plus"><i class="fab fa-skype"></i></a>
+                <a href="#" class="linkedin"><i class="fab fa-linkedin"></i></a>
+              </div>
+            </p>
+    
+    
+          </center>
+        </div>
+        <div class="column">
+          <h3 style="color:red;">Contacto</h3>
+          <form action="javascript:void(0)" onsubmit="metodos.capturarDatos3()">
+              <input required type="email" id="txtCorreo" placeholder="Ingrese su correo"/>
+              <input required type="text" id="txtAsunto" placeholder="Ingrese el asunto"/>
+              <textarea required name="" placeholder="Ingrese un mensaje" id="txtMensaje" cols="20" rows="10"></textarea>
+              <input type="submit" value="Enviar" />
+          </form>
+        </div>
       </div>
     </footer>
+    <script>
+      console.log("Desde el body");
+    </script>
+    <script src="./assets/js/main.js"></script>
+
   </body>
 </html>
