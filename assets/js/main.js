@@ -30,13 +30,22 @@ const metodos = {
     let txtMensaje = document.getElementById("txtMensaje");
     console.log(txtAsunto.value, txtMensaje.value, txtCorreo.value);
 
-    let validacion = validarInformacion(
-      txtCorreo.value,
-      txtAsunto.value,
-      txtMensaje.value
-    );
+    let correo = txtCorreo.value;
+    let asunto = txtAsunto.value;
+    let mensaje = txtMensaje.value;
 
-    console.log("Validación", validacion);
+    let validacion = validarInformacion(correo, asunto, mensaje);
+    if (validacion) {
+      console.log("Validación", validacion);
+      let contacto = {};
+      contacto.correo = correo;
+      contacto.asunto = asunto;
+      contacto.mensaje = mensaje;
+      //TODO: Pendiente de terminar el formulario de contacto con el backend.
+      console.log("JSON contacto", contacto);
+    } else {
+      alert("Datos incorrectos.");
+    }
   },
 };
 
