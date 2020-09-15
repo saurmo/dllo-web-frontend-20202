@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registraté</title>
+  </head>
+  <body>
+    <header id="header">
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/pages/registro.html">Registraté</a></li>
+          <li><a href="/#nosotros">Sobre nosotros</a></li>
+          <li><a href="/pages/blog">Blog</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <form action="javascript:void(0)" onsubmit="methods.createPerson()">
+        <p>
+          Tipo de identificación
+          <select name="tipo_identificacion" id="tipo_identificacion" required>
+            <option value="">Seleccione un tipo de identificación</option>
+            <option value="cc">Cédula ciudadania</option>
+            <option value="ce">Cédula extranjería</option>
+            <option value="ti">Tarjeta de identidad</option>
+            <option value="pasaporte">Pasaporte</option>
+          </select>
+        </p>
+        <p>
+          Identificación
+          <input type="text" id="identificacion" required />
+        </p>
+        <p>
+          Nombres
+          <input type="text" id="nombre" required />
+        </p>
+        <p>
+          Apellidos
+          <input type="text" id="apellido" required />
+        </p>
+        <p>
+          Correo
+          <input type="email" id="correo" required />
+        </p>
+        <p>
+          Celular
+          <input type="text" id="celular" required />
+        </p>
+        <p>
+          Clave
+          <input type="password" id="clave" required />
+        </p>
+        <p>
+          Rol
+          <select name="rol" id="rol" required>
+            <option value="">Seleccione un rol</option>
+            <option value="admin">Administrador</option>
+            <option value="mecanico">Mécanico</option>
+          </select>
+        </p>
+        <p>
+          <input type="checkbox" id="terminos_condiciones" required />
+          <a href="http://">Acepto términos y condiciones</a>
+        </p>
+        <p>
+          <input type="submit" value="Registrar persona" />
+        </p>
+      </form>
+
+      <div>
+        <table border="1">
+          <thead>
+            <th>Tipo de identificación</th>
+            <th>Identificación</th>
+            <th>Nombre completo</th>
+            <th>Celular</th>
+            <th>Correo</th>
+          </thead>
+          <tbody name="persons"></tbody>
+        </table>
+      </div>
+    </main>
+
+    <script src="../assets/js/registro.js"></script>
+  </body>
+</html>
