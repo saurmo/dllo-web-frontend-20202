@@ -12,6 +12,9 @@
 * Boolean: false, true
 * Object: {}
 * Array: []
+
+** null
+** undefined
 ```
 
 - Convetir de string a números

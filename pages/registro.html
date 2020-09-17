@@ -4,23 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registraté</title>
+    <link rel="stylesheet" href="../assets/css/registro.css" />
   </head>
   <body>
     <header id="header">
       <nav class="nav-menu">
         <ul>
           <li><a href="/">Inicio</a></li>
-          <li><a href="/pages/registro.html">Registraté</a></li>
+          <li><a href="/pages/registro.html">Registro</a></li>
           <li><a href="/#nosotros">Sobre nosotros</a></li>
           <li><a href="/pages/blog">Blog</a></li>
         </ul>
       </nav>
     </header>
     <main>
-      <form action="javascript:void(0)" onsubmit="methods.createPerson()">
+      <form>
         <p>
           Tipo de identificación
-          <select name="tipo_identificacion" id="tipo_identificacion" required>
+          <select
+            class="input-registro"
+            name="tipo_identificacion"
+            id="tipo_identificacion"
+            required
+          >
             <option value="">Seleccione un tipo de identificación</option>
             <option value="cc">Cédula ciudadania</option>
             <option value="ce">Cédula extranjería</option>
@@ -30,31 +36,31 @@
         </p>
         <p>
           Identificación
-          <input type="text" id="identificacion" required />
+          <input class="input-registro" type="text" id="identificacion" required />
         </p>
         <p>
           Nombres
-          <input type="text" id="nombre" required />
+          <input class="input-registro" type="text" id="nombre" required />
         </p>
         <p>
           Apellidos
-          <input type="text" id="apellido" required />
+          <input class="input-registro" type="text" id="apellido" required />
         </p>
         <p>
           Correo
-          <input type="email" id="correo" required />
+          <input class="input-registro" type="email" id="correo" required />
         </p>
         <p>
           Celular
-          <input type="text" id="celular" required />
+          <input class="input-registro" type="text" id="celular" required />
         </p>
         <p>
           Clave
-          <input type="password" id="clave" required />
+          <input class="input-registro" type="password" id="clave" required />
         </p>
         <p>
           Rol
-          <select name="rol" id="rol" required>
+          <select class="input-registro" name="rol" id="rol" required>
             <option value="">Seleccione un rol</option>
             <option value="admin">Administrador</option>
             <option value="mecanico">Mécanico</option>
@@ -65,7 +71,21 @@
           <a href="http://">Acepto términos y condiciones</a>
         </p>
         <p>
-          <input type="submit" value="Registrar persona" />
+          <input
+            class="btn"
+            id="btnCreate"
+            type="submit"
+            value="Registrar persona"
+            formaction="javascript:methods.createPerson()"
+          />
+          <button
+            class="btn"
+            id="btnUpdate"
+            type="submit"
+            formaction="javascript:methods.updatePerson()"
+          >
+            Guardar edición
+          </button>
         </p>
       </form>
 
@@ -77,8 +97,10 @@
             <th>Nombre completo</th>
             <th>Celular</th>
             <th>Correo</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
           </thead>
-          <tbody name="persons"></tbody>
+          <tbody id="persons"></tbody>
         </table>
       </div>
     </main>
