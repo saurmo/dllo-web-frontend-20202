@@ -1,6 +1,6 @@
 <template>
   <!-- Layout de barra de navegación para las páginas -->
-  <div>
+  <v-app>
     <v-navigation-drawer v-model="drawer" app>
       <v-list-item>
         <v-list-item-content>
@@ -23,7 +23,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar dense>
+    <v-app-bar color="#009688">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>El Taller</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -35,7 +35,7 @@
     <v-main>
       <v-container> <nuxt /> </v-container>
     </v-main>
-  </div>
+  </v-app>
 </template>
 <script>
 export default {

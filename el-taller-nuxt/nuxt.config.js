@@ -16,4 +16,22 @@ export default {
     // https://go.nuxtjs.dev/vuetify
     "@nuxtjs/vuetify",
   ],
+
+  // Configuración del vuetify
+  vuetify: {
+    theme: {
+      light: true,
+      themes: {
+        light: {
+          primary: "#009688",
+          "dark-primary": "#00796B",
+          "light-primary": "#B2DFDB",
+          secondary: "#757575",
+          text: "#212121",
+          "primary-text": "#212121",
+          accent: "#607D8B",
+        },
+      },
+    },
+  },
 };

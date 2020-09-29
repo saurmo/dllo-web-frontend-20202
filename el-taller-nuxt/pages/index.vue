@@ -5,7 +5,7 @@
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
           <v-card>
-            <v-toolbar dark flat>
+            <v-toolbar color="primary" flat>
               <v-toolbar-title>El Taller</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
