@@ -11,7 +11,7 @@ export default {
       { hid: "description", name: "description", content: "" },
     ],
   },
-  modules: ["nuxt-sweetalert2"],
+  modules: ["nuxt-sweetalert2", "@nuxtjs/axios"],
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [

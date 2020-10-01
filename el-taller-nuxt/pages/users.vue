@@ -147,13 +147,7 @@ export default {
         accepted: null,
         rol: null,
       },
-      identification_types: [
-        { id: "01", name: "CC" },
-        { id: "02", name: "CE" },
-        { id: "03", name: "TI" },
-        { id: "04", name: "Pasaporte" },
-        { id: "05", name: "RC" },
-      ],
+      identification_types: [],
       fieldRequired: [(v) => !!v || "Field is required"],
       emailRules: [
         (v) => !!v || "E-mail is required",
@@ -168,6 +162,15 @@ export default {
     loadPage() {
       let users = localStorage.getItem("users");
       this.users = JSON.parse(users);
+      this.loadIdenticationTypes();
+    },
+    loadIdenticationTypes() {
+      let url = "http://localhost:3001/identification_types";
+      console.log(url);
+      this.$axios.get(url).then((response) => {
+        let data = response.data;
+        this.identification_types = data;
+      });
     },
     save() {
       if (this.$refs.formUsers.validate() && this.formUsers) {

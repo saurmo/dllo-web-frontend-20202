@@ -7,10 +7,12 @@
     "start": "nuxt start"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.12.2",
     "nuxt": "^2.14.6",
     "nuxt-sweetalert2": "^1.0.0"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "^1.11.2"
+    "@nuxtjs/vuetify": "^1.11.2",
+    "json-server": "^0.16.2"
   }
 }
