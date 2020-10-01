@@ -20,6 +20,7 @@
             <v-text-field
               v-model="user.identification"
               :rules="fieldRequired"
+              :disabled="editing"
               label="Identification"
               required
             ></v-text-field>
@@ -70,7 +71,8 @@
             ></v-checkbox>
           </v-col>
           <v-col cols="12" md="4">
-            <v-btn color="accent" @click="save()">Save</v-btn>
+            <v-btn color="accent" @click="save()" v-if="!editing">Save</v-btn>
+            <v-btn color="accent" @click="editUser()" v-else>Edit user</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -81,7 +83,16 @@
       :items="users"
       :items-per-page="5"
       class="elevation-1"
-    ></v-data-table>
+    >
+      <template v-slot:item.actions="{ item }">
+        <v-icon small class="mr-2" @click="loadUser(item)">
+          mdi-pencil
+        </v-icon>
+        <v-icon small @click="deleteUser(item)">
+          mdi-delete
+        </v-icon>
+      </template>
+    </v-data-table>
 
     <!-- Dialogo de alerta cuando el formulario no es valido -->
     <v-dialog v-model="dialog" max-width="290">
@@ -111,6 +122,11 @@ export default {
   beforeMount() {
     this.loadPage();
   },
+  beforeUpdate() {
+    try {
+      this.$refs.formUsers.validate();
+    } catch (error) {}
+  },
   data() {
     return {
       formUsers: null,
@@ -118,7 +134,7 @@ export default {
         { text: "Identification", value: "identification" },
         { text: "Firstname", value: "firstname" },
         { text: "Email", value: "email" },
-        { text: "Actions" },
+        { text: "Actions", value: "actions" },
       ],
       users: [],
       user: {
@@ -144,6 +160,8 @@ export default {
         (v) => /.+@.+/.test(v) || "E-mail must be valid",
       ],
       dialog: false,
+      // Si esta editando o no
+      editing: false,
     };
   },
   methods: {
@@ -161,12 +179,93 @@ export default {
           localStorage.setItem("users", JSON.stringify(this.users));
           // this.listPersons();
           this.user = {};
-          alert("La persona ha sido creada correctamente.");
+
+          this.$swal.fire(
+            "Creado",
+            "La persona ha sido creada correctamente.!",
+            "success"
+          );
         } else {
-          alert("La persona ya existe en la tabla.");
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "La persona ya existe en la tabla.",
+          });
         }
       } else {
         this.dialog = true;
+      }
+    },
+    loadUser(user) {
+      this.user = Object.assign({}, user);
+      this.editing = true;
+    },
+    editUser() {
+      console.log(" -- modificar la persona con los datos cargados -- ");
+      if (this.$refs.formUsers.validate() && this.formUsers) {
+        // Encontrar la posición que esta el usuario en el array
+        let existIndex = this.users.findIndex(
+          (x) => x.identification == this.user.identification
+        );
+        // Validación si la identificación de una persona ya existe en el array
+        if (existIndex > -1) {
+          console.log("La persona existe y esta en la posición del array", existIndex);
+          //Modificar la persona del array
+          this.users.splice(existIndex, 1, this.user);
+          this.user = {};
+          this.editing = false;
+          localStorage.setItem("users", JSON.stringify(this.users));
+          this.$swal.fire(
+            "Modificado.",
+            "La persona ha sido modificada correctamente.!",
+            "success"
+          );
+        } else {
+          this.$swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "La persona NO existe en la tabla.",
+          });
+        }
+      } else {
+        this.dialog = true;
+      }
+    },
+    deleteUser(user) {
+      console.log(user);
+      let existIndex = this.users.findIndex(
+        (x) => x.identification == user.identification
+      );
+      if (existIndex > -1) {
+        this.$swal
+          .fire({
+            title: "Desea eliminar el usuario?",
+            text: "Este cambio no se puede revertir.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si, eliminalo!",
+            cancelButtonText: "Cancelar",
+          })
+          .then((result) => {
+            console.log(result);
+            if (result.value) {
+              this.users.splice(existIndex, 1);
+              localStorage.setItem("users", JSON.stringify(this.users));
+              this.$swal.fire(
+                "Eliminado.",
+                "La persona ha sido eliminada correctamente.!",
+                "success"
+              );
+            }
+          });
+      } else {
+        this.$swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "La persona NO existe en la tabla.",
+        });
       }
     },
   },

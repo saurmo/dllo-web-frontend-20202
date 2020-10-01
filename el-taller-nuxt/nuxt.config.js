@@ -11,6 +11,8 @@ export default {
       { hid: "description", name: "description", content: "" },
     ],
   },
+  modules: ["nuxt-sweetalert2"],
+
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
     // https://go.nuxtjs.dev/vuetify

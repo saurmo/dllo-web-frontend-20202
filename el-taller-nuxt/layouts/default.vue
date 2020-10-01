@@ -23,7 +23,8 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar color="#009688">
+
+    <v-app-bar app color="primary">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>El Taller</v-toolbar-title>
       <v-spacer></v-spacer>
