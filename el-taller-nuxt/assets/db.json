@@ -1,15 +1,30 @@
 {
   "identification_types": [
-    { "id": "01", "name": "CC" },
-    { "id": "02", "name": "CE" },
-    { "id": "03", "name": "TI" },
-    { "id": "04", "name": "Pasaporte" },
-    { "id": "05", "name": "RC" }
+    {
+      "id": "01",
+      "name": "CC"
+    },
+    {
+      "id": "02",
+      "name": "CE"
+    },
+    {
+      "id": "03",
+      "name": "TI"
+    },
+    {
+      "id": "04",
+      "name": "Pasaporte"
+    },
+    {
+      "id": "05",
+      "name": "RC"
+    }
   ],
   "users": [
     {
       "identification_type": "01",
-      "id": "123",
+      "id": "001",
       "firstname": "Carolina",
       "lastname": "Urrego",
       "email": "carolina@udem.edu.co",
@@ -18,22 +33,12 @@
       "rol": null
     },
     {
-      "identification_type": "01",
-      "identification": "1233",
-      "firstname": "Test",
-      "lastname": "Test",
-      "email": "santimo0108@gmail.com",
-      "password": "test",
-      "accepted": true,
-      "rol": null
-    },
-    {
       "identification_type": "02",
-      "identification": "01",
-      "firstname": "Test",
-      "lastname": "test",
-      "email": "santimo0108@gmail.com",
-      "password": "test",
+      "id": "002",
+      "firstname": "Camila",
+      "lastname": "Zapata",
+      "email": "camila@udem.edu.co",
+      "password": "admin123",
       "accepted": true,
       "rol": null
     }

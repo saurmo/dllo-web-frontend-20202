@@ -18,7 +18,7 @@
 
           <v-col cols="12" md="6">
             <v-text-field
-              v-model="user.identification"
+              v-model="user.id"
               :rules="fieldRequired"
               :disabled="editing"
               label="Identification"
@@ -131,7 +131,7 @@ export default {
     return {
       formUsers: null,
       headers: [
-        { text: "Identification", value: "identification" },
+        { text: "Identification", value: "id" },
         { text: "Firstname", value: "firstname" },
         { text: "Email", value: "email" },
         { text: "Actions", value: "actions" },
@@ -139,7 +139,7 @@ export default {
       users: [],
       user: {
         identification_type: null,
-        identification: null,
+        id: null,
         firstname: null,
         lastname: null,
         email: null,
@@ -160,34 +160,39 @@ export default {
   },
   methods: {
     loadPage() {
-      let users = localStorage.getItem("users");
-      this.users = JSON.parse(users);
       this.loadIdenticationTypes();
+      this.loadUsers();
     },
     loadIdenticationTypes() {
       let url = "http://localhost:3001/identification_types";
-      console.log(url);
       this.$axios.get(url).then((response) => {
         let data = response.data;
         this.identification_types = data;
       });
     },
+    loadUsers() {
+      let url = "http://localhost:3001/users";
+      this.$axios.get(url).then((response) => {
+        let data = response.data;
+        this.users = data;
+      });
+    },
     save() {
       if (this.$refs.formUsers.validate() && this.formUsers) {
         //Save users
-        let exist = this.users.find((x) => x.identification == this.user.identification);
+        let exist = this.users.find((x) => x.id == this.user.id);
         // Validación si la identificación de una persona ya existe en el array
         if (exist == undefined) {
-          this.users.push(this.user);
-          localStorage.setItem("users", JSON.stringify(this.users));
-          // this.listPersons();
-          this.user = {};
-
-          this.$swal.fire(
-            "Creado",
-            "La persona ha sido creada correctamente.!",
-            "success"
-          );
+          let url = "http://localhost:3001/users";
+          this.$axios.post(url, this.user).then((response) => {
+            this.loadUsers();
+            this.user = {};
+            this.$swal.fire(
+              "Creado",
+              "La persona ha sido creada correctamente.!",
+              "success"
+            );
+          });
         } else {
           Swal.fire({
             icon: "error",
@@ -207,22 +212,22 @@ export default {
       console.log(" -- modificar la persona con los datos cargados -- ");
       if (this.$refs.formUsers.validate() && this.formUsers) {
         // Encontrar la posición que esta el usuario en el array
-        let existIndex = this.users.findIndex(
-          (x) => x.identification == this.user.identification
-        );
+        let existIndex = this.users.findIndex((x) => x.id == this.user.id);
         // Validación si la identificación de una persona ya existe en el array
         if (existIndex > -1) {
           console.log("La persona existe y esta en la posición del array", existIndex);
           //Modificar la persona del array
-          this.users.splice(existIndex, 1, this.user);
-          this.user = {};
-          this.editing = false;
-          localStorage.setItem("users", JSON.stringify(this.users));
-          this.$swal.fire(
-            "Modificado.",
-            "La persona ha sido modificada correctamente.!",
-            "success"
-          );
+          let url = "http://localhost:3001/users/" + this.user.id;
+          this.$axios.put(url, this.user).then((response) => {
+            this.user = {};
+            this.editing = false;
+            this.$swal.fire(
+              "Modificado.",
+              "La persona ha sido modificada correctamente.!",
+              "success"
+            );
+            this.loadUsers();
+          });
         } else {
           this.$swal.fire({
             icon: "error",
@@ -236,9 +241,7 @@ export default {
     },
     deleteUser(user) {
       console.log(user);
-      let existIndex = this.users.findIndex(
-        (x) => x.identification == user.identification
-      );
+      let existIndex = this.users.findIndex((x) => x.id == user.id);
       if (existIndex > -1) {
         this.$swal
           .fire({
@@ -254,13 +257,15 @@ export default {
           .then((result) => {
             console.log(result);
             if (result.value) {
-              this.users.splice(existIndex, 1);
-              localStorage.setItem("users", JSON.stringify(this.users));
-              this.$swal.fire(
-                "Eliminado.",
-                "La persona ha sido eliminada correctamente.!",
-                "success"
-              );
+              let url = "http://localhost:3001/users/" + user.id;
+              this.$axios.delete(url).then((response) => {
+                this.$swal.fire(
+                  "Eliminado.",
+                  "La persona ha sido eliminada correctamente.!",
+                  "success"
+                );
+                this.loadUsers();
+              });
             }
           });
       } else {
