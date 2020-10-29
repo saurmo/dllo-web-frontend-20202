@@ -9,12 +9,11 @@
               <v-toolbar-title>El Taller</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-              <v-form>
+              <v-form ref="formData">
                 <v-text-field
-                  label="Correo"
-                  prepend-icon="mdi-email-open"
-                  type="email"
-                  v-model="email"
+                  label="Id"
+                  prepend-icon="mdi-people"
+                  v-model="id"
                 ></v-text-field>
 
                 <v-text-field
@@ -40,16 +39,56 @@ export default {
   layout: "blank",
   data() {
     return {
-      email: null,
+      id: null,
       password: null,
     };
   },
   methods: {
-    login() {
-      console.log("Login");
-      console.log(this.email, this.password);
-      if (this.email && this.password) {
-        this.$router.push("/home");
+    async login() {
+      if (this.$refs.formData.validate()) {
+        try {
+          let payload = {};
+          payload.id = this.id;
+          payload.password = this.password;
+          let url = "http://localhost:3001/api/v1/login";
+
+          let { data } = await this.$axios.post(url, payload);
+          if (data.ok) {
+            let token = data.info.token;
+            let rol = data.info.rol;
+            localStorage.setItem("token", token);
+            if (rol == 1 || rol == 3) {
+              // Administradores
+              this.$router.push("/home");
+            } else if (rol == 2) {
+              // Mecánico
+              this.$router.push("/home-mechanic");
+            } else {
+              // Cliente
+              this.$router.push("/home-client");
+            }
+          } else {
+            this.$swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            });
+          }
+        } catch (error) {
+          if (error.response) {
+            this.$swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: error.response.data.message,
+            });
+          } else {
+            this.$swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: error,
+            });
+          }
+        }
       }
     },
   },

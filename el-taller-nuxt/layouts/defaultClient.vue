@@ -1,35 +1,11 @@
 <template>
   <!-- Layout de barra de navegación para las páginas -->
   <v-app>
-    <v-navigation-drawer v-model="drawer" app>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title>Menú Administrador</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
-      <v-list dense>
-        <!-- Menu items -->
-        <v-list-item v-for="item in items_menu" :key="item.id" :to="item.route">
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title style="padding:5px;">{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
     <v-app-bar app color="primary">
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="white--text">El Taller</v-toolbar-title>
       <v-spacer></v-spacer>
       <span v-if="user" class="white--text mx-2">
-        {{ user.nombre }} {{ user.apellido }}
+        Hola {{ user.nombre }} {{ user.apellido }}
       </span>
 
       <v-btn @click="logout()">
@@ -71,14 +47,12 @@ export default {
         this.$axios.setToken(token, "Bearer");
         let { data } = await this.$axios.get(url);
         this.user = data.info;
-        localStorage.setItem("userIn", JSON.stringify(data.info));
       } catch (error) {
         this.$router.push("/");
       }
     },
     logout() {
       localStorage.removeItem("token");
-      localStorage.removeItem("userIn");
       this.$router.push("/");
     },
   },

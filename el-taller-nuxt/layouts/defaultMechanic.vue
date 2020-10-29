@@ -4,7 +4,7 @@
     <v-navigation-drawer v-model="drawer" app>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>Menú Administrador</v-list-item-title>
+          <v-list-item-title>Menú Mecánico</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
@@ -49,8 +49,7 @@ export default {
       user: null,
       drawer: null,
       items_menu: [
-        { id: "01", title: "Home", icon: "mdi-home", route: "/home" },
-        { id: "02", title: "Users", icon: "mdi-account-group", route: "/users" },
+        { id: "01", title: "Home", icon: "mdi-home", route: "/home-mechanic" },
         {
           id: "03",
           title: "Motorcycles",
@@ -71,14 +70,12 @@ export default {
         this.$axios.setToken(token, "Bearer");
         let { data } = await this.$axios.get(url);
         this.user = data.info;
-        localStorage.setItem("userIn", JSON.stringify(data.info));
       } catch (error) {
         this.$router.push("/");
       }
     },
     logout() {
       localStorage.removeItem("token");
-      localStorage.removeItem("userIn");
       this.$router.push("/");
     },
   },

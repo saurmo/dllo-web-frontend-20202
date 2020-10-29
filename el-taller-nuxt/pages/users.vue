@@ -4,7 +4,7 @@
     <v-form v-model="formUsers" ref="formUsers">
       <v-container>
         <v-row>
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="4">
             <v-select
               :items="identification_types"
               item-value="id"
@@ -16,7 +16,19 @@
             ></v-select>
           </v-col>
 
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="4">
+            <v-select
+              :items="roles"
+              item-value="id"
+              item-text="nombre"
+              :rules="fieldRequired"
+              required
+              v-model="user.rol"
+              label="Rol"
+            ></v-select>
+          </v-col>
+
+          <v-col cols="12" md="4">
             <v-text-field
               v-model="user.id"
               :rules="fieldRequired"
@@ -49,11 +61,12 @@
               v-model="user.email"
               :rules="emailRules"
               label="Email"
+              type="email"
               required
             ></v-text-field>
           </v-col>
 
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="4" v-if="!editing">
             <v-text-field
               v-model="user.password"
               type="password"
@@ -62,7 +75,7 @@
               required
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="4" v-if="!editing">
             <v-checkbox
               required
               :rules="fieldRequired"
@@ -88,7 +101,7 @@
         <v-icon small class="mr-2" @click="loadUser(item)">
           mdi-pencil
         </v-icon>
-        <v-icon small @click="deleteUser(item)">
+        <v-icon small @click="deleteUser(item)" v-if="userIn == 1">
           mdi-delete
         </v-icon>
       </template>
@@ -117,6 +130,7 @@
   </div>
 </template>
 <script>
+const url_api = "http://localhost:3001/api/v1/";
 export default {
   name: "UsersPage",
   beforeMount() {
@@ -129,11 +143,13 @@ export default {
   },
   data() {
     return {
+      userIn: null,
       formUsers: null,
       headers: [
         { text: "Identification", value: "id" },
         { text: "Firstname", value: "firstname" },
         { text: "Email", value: "email" },
+        { text: "Rol", value: "nombre_rol" },
         { text: "Actions", value: "actions" },
       ],
       users: [],
@@ -148,10 +164,14 @@ export default {
         rol: null,
       },
       identification_types: [],
+      roles: [],
       fieldRequired: [(v) => !!v || "Field is required"],
       emailRules: [
         (v) => !!v || "E-mail is required",
-        (v) => /.+@.+/.test(v) || "E-mail must be valid",
+        (v) =>
+          /^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,63}$/i.test(
+            v
+          ) || "E-mail must be valid",
       ],
       dialog: false,
       // Si esta editando o no
@@ -160,31 +180,62 @@ export default {
   },
   methods: {
     loadPage() {
-      this.loadIdenticationTypes();
+      this.loadExternalInfo();
       this.loadUsers();
     },
-    loadIdenticationTypes() {
-      let url = "http://localhost:3001/identification_types";
-      this.$axios.get(url).then((response) => {
-        let data = response.data;
-        this.identification_types = data;
-      });
+    /**
+     * Carga los tipos de identificación y los roles desde base de datos
+     */
+    async loadExternalInfo() {
+      let { data } = await this.$axios.get(url_api + "roles");
+      this.userIn = JSON.parse(localStorage.getItem("userIn"));
+      this.roles = data.info;
+      this.identification_types = [
+        {
+          id: "01",
+          name: "CC",
+        },
+        {
+          id: "02",
+          name: "CE",
+        },
+        {
+          id: "03",
+          name: "TI",
+        },
+        {
+          id: "04",
+          name: "Pasaporte",
+        },
+        {
+          id: "05",
+          name: "RC",
+        },
+      ];
     },
     loadUsers() {
-      let url = "http://localhost:3001/users";
-      this.$axios.get(url).then((response) => {
-        let data = response.data;
-        this.users = data;
-      });
+      this.$axios
+        .get(url_api + "users")
+        .then((response) => {
+          let data = response.data;
+          this.users = data.info;
+        })
+        .catch((error) => {
+          this.$swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Error al consultar los usuarios",
+          });
+        });
     },
-    save() {
+    async save() {
       if (this.$refs.formUsers.validate() && this.formUsers) {
-        //Save users
-        let exist = this.users.find((x) => x.id == this.user.id);
-        // Validación si la identificación de una persona ya existe en el array
-        if (exist == undefined) {
-          let url = "http://localhost:3001/users";
-          this.$axios.post(url, this.user).then((response) => {
+        try {
+          //Save users
+          let exist = this.users.find((x) => x.id == this.user.id);
+          // Validación si la identificación de una persona ya existe en el array
+          if (exist == undefined) {
+            let { data } = await this.$axios.post(url_api + "users", this.user);
             this.loadUsers();
             this.user = {};
             this.$swal.fire(
@@ -192,12 +243,18 @@ export default {
               "La persona ha sido creada correctamente.!",
               "success"
             );
-          });
-        } else {
-          Swal.fire({
+          } else {
+            this.$swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "La persona ya existe en la tabla.",
+            });
+          }
+        } catch (error) {
+          this.$swal.fire({
             icon: "error",
             title: "Oops...",
-            text: "La persona ya existe en la tabla.",
+            text: "Error al crear la persona.",
           });
         }
       } else {
@@ -217,17 +274,26 @@ export default {
         if (existIndex > -1) {
           console.log("La persona existe y esta en la posición del array", existIndex);
           //Modificar la persona del array
-          let url = "http://localhost:3001/users/" + this.user.id;
-          this.$axios.put(url, this.user).then((response) => {
-            this.user = {};
-            this.editing = false;
-            this.$swal.fire(
-              "Modificado.",
-              "La persona ha sido modificada correctamente.!",
-              "success"
-            );
-            this.loadUsers();
-          });
+          let path = "users/" + this.user.id;
+          this.$axios
+            .put(url_api + path, this.user)
+            .then((response) => {
+              this.user = {};
+              this.editing = false;
+              this.$swal.fire(
+                "Modificado.",
+                "La persona ha sido modificada correctamente.!",
+                "success"
+              );
+              this.loadUsers();
+            })
+            .catch((error) => {
+              this.$swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Error al modificar la persona.",
+              });
+            });
         } else {
           this.$swal.fire({
             icon: "error",
@@ -240,7 +306,6 @@ export default {
       }
     },
     deleteUser(user) {
-      console.log(user);
       let existIndex = this.users.findIndex((x) => x.id == user.id);
       if (existIndex > -1) {
         this.$swal
@@ -255,17 +320,25 @@ export default {
             cancelButtonText: "Cancelar",
           })
           .then((result) => {
-            console.log(result);
             if (result.value) {
-              let url = "http://localhost:3001/users/" + user.id;
-              this.$axios.delete(url).then((response) => {
-                this.$swal.fire(
-                  "Eliminado.",
-                  "La persona ha sido eliminada correctamente.!",
-                  "success"
-                );
-                this.loadUsers();
-              });
+              let path = "users/" + user.id;
+              this.$axios
+                .delete(url_api + path)
+                .then((response) => {
+                  this.$swal.fire(
+                    "Eliminado.",
+                    "La persona ha sido eliminada correctamente.!",
+                    "success"
+                  );
+                  this.loadUsers();
+                })
+                .catch((error) => {
+                  this.$swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Error eliminando la persona",
+                  });
+                });
             }
           });
       } else {
