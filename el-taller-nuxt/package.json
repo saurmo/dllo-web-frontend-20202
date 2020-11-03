@@ -9,7 +9,9 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
     "nuxt": "^2.14.6",
-    "nuxt-sweetalert2": "^1.0.0"
+    "nuxt-sweetalert2": "^1.0.0",
+    "vue-cookies": "^1.7.4",
+    "vue-moment": "^4.1.0"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.11.2",

@@ -13,6 +13,8 @@ export default {
   },
   modules: ["nuxt-sweetalert2", "@nuxtjs/axios"],
 
+  plugins: ["~/plugins/vue-cookie.js", "~/plugins/vue-moment.js"],
+
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
     // https://go.nuxtjs.dev/vuetify

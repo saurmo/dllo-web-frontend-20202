@@ -115,6 +115,17 @@
         <v-icon small class="mr-2" @click="loadBike(item)">
           mdi-pencil
         </v-icon>
+        <v-btn
+          small
+          color="blue-grey"
+          class="ma-2 white--text text-none"
+          @click="loadTracking(item)"
+        >
+          Seguimiento
+          <v-icon right dark>
+            mdi-clipboard-list
+          </v-icon>
+        </v-btn>
         <v-icon small @click="deleteBike(item)" v-if="userIn == 1">
           mdi-delete
         </v-icon>
@@ -214,6 +225,10 @@ export default {
           name: "Pendiente de entrega",
         },
       ];
+    },
+    loadTracking(item) {
+      this.$cookies.set("id_motorcycle", item.placa);
+      this.$router.push("/tracking");
     },
     loadBikes() {
       this.$axios
