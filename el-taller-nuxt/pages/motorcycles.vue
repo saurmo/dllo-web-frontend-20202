@@ -85,13 +85,12 @@
               label="Nro Matricula"
             ></v-text-field>
           </v-col>
-
+          <!-- :rules="fieldRequired"
+                required -->
           <v-col cols="12" md="4">
             <v-file-input
               v-model="bike.imagen"
-              :rules="fieldRequired"
               label="Imagen"
-              required
               @change="loadImage"
               truncate-length="15"
             ></v-file-input>
@@ -129,6 +128,9 @@
         <v-icon small @click="deleteBike(item)" v-if="userIn == 1">
           mdi-delete
         </v-icon>
+      </template>
+      <template slot="item.imagen" slot-scope="{ item }">
+        <a :href="item.imagen" target="blank">Abrir imagen</a>
       </template>
     </v-data-table>
 
@@ -175,6 +177,7 @@ export default {
         { text: "Propietario", value: "nombre_propietario" },
         { text: "Marca", value: "marca" },
         { text: "Cilindraje", value: "cilindraje" },
+        { text: "Imagen", value: "imagen", sortable: false },
         { text: "Actions", value: "actions" },
       ],
       bikes: [],
