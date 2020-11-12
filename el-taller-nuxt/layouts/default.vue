@@ -43,6 +43,8 @@
   </v-app>
 </template>
 <script>
+import config from "../assets/config";
+const url_api = config.API_URL;
 export default {
   data() {
     return {
@@ -67,7 +69,7 @@ export default {
     async loadUser() {
       try {
         let token = localStorage.getItem("token");
-        let url = "http://localhost:3001/api/v1/valid";
+        let url = url_api + "valid";
         this.$axios.setToken(token, "Bearer");
         let { data } = await this.$axios.get(url);
         this.user = data.info;

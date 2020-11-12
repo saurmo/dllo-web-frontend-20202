@@ -35,6 +35,8 @@
   </v-main>
 </template>
 <script>
+import config from "../assets/config";
+const url_api = config.API_URL;
 export default {
   layout: "blank",
   data() {
@@ -50,7 +52,7 @@ export default {
           let payload = {};
           payload.id = this.id;
           payload.password = this.password;
-          let url = "http://localhost:3001/api/v1/login";
+          let url = url_api + "login";
 
           let { data } = await this.$axios.post(url, payload);
           if (data.ok) {

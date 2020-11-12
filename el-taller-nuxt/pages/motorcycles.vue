@@ -157,7 +157,8 @@
   </div>
 </template>
 <script>
-const url_api = "http://localhost:3001/api/v1/";
+import config from "../assets/config";
+const url_api = config.API_URL;
 export default {
   name: "MotorcyclePage",
   beforeMount() {
